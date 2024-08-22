@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='img/filtering.png') }}">
+    <title>Spam Filter</title>
+    <style>
+        
+    </style>
+</head>
+<body>
+    <div class="main">
+        <h1>Spam Filter</h1>
+        <form action="/" method="post">
+            <label for="message">Enter your email:</label><br>
+            <textarea name="message" id="message" rows="10" cols="30"></textarea><br>
+            <input type="submit" value="Check" id="check-button" class="disabled" disabled>
+        </form>
+
+        {% if prediction %}
+            <h2>Result:</h2>
+            <p>Spam Probability: {{ spam_prob }}%</p>
+            <p>This message is classified as: <strong>{{ prediction }}</strong></p>
+
+            <form action="/feedback" method="post">
+                <input type="hidden" name="message" value="{{ message }}">
+                <label for="correct_classification">Is this classification correct?</label><br>
+                <input type="radio" id="correct" name="correct_classification" value="yes"> Yes<br>
+                <input type="radio" id="incorrect" name="correct_classification" value="no"> No<br>
+                <div id="correct_label_div" style="display:none;">
+                    <label for="correct_label">Select correct label:</label><br>
+                    <input type="radio" id="ham" name="correct_label" value="ham"> Ham<br>
+                    <input type="radio" id="spam" name="correct_label" value="spam"> Spam<br>
+                </div>
+                <input type="submit" value="Submit Feedback">
+            </form>
+        {% endif %}
+
+        <!-- Flash messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="notification" id="notification">
+                    {% for category, message in messages %}
+                        <p>{{ message }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+        <script>
+            document.querySelectorAll('input[name="correct_classification"]').forEach((elem) => {
+                elem.addEventListener("change", function(event) {
+                    var value = event.target.value;
+                    var correctLabelDiv = document.getElementById('correct_label_div');
+                    correctLabelDiv.style.display = value === "no" ? "block" : "none";
+                });
+            });
+
+            // Show the notification if it exists
+            window.addEventListener('load', function() {
+                var notification = document.getElementById('notification');
+                if (notification) {
+                    notification.style.display = 'block';
+                    setTimeout(function() {
+                        notification.style.display = 'none';
+                    }, 5000);  // Hide the notification after 5 seconds
+                }
+            });
+
+
+            const messageInput = document.getElementById('message');
+            const checkButton = document.getElementById('check-button');
+    
+            function toggleCheckButton() {
+                if (messageInput.value.trim() === '') {
+                    checkButton.disabled = true;
+                    checkButton.classList.add('disabled');
+                } else {
+                    checkButton.disabled = false;
+                    checkButton.classList.remove('disabled');
+                }
+            }
+    
+            messageInput.addEventListener('input', toggleCheckButton);
+    
+            // Initial check in case there's already content
+            toggleCheckButton();
+    
+            // Show the notification if it exists
+            window.addEventListener('load', function() {
+                const notification = document.getElementById('notification');
+                if (notification) {
+                    notification.style.display = 'block';
+                    setTimeout(function() {
+                        notification.style.display = 'none';
+                    }, 5000);  // Hide the notification after 5 seconds
+                }
+            });
+        </script>
+    </div>
+    
+
+    
+</body>
+</html>

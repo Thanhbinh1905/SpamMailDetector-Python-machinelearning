@@ -1,0 +1,82 @@
+body {
+    display: flex;
+    align-items: center;
+    /* justify-content: center; */
+    font-family: sans-serif;
+    /* line-height: 1.5; */
+    min-height: 100vh;
+    background: #DDE5F4;
+    flex-direction: column;
+    margin: 0;
+}
+.main {
+    margin-top: 5vh;
+    width: 90%;
+    background-color: #F1F7FE;
+    border-radius: 15px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+    padding: 30px 20px;
+    transition: transform 0.2s;
+}
+/* .navbar-brand {
+    margin-left: 3vh;
+    margin-right: 2vh;
+}
+li {
+
+    border-radius: 17px;
+    margin-right: 1vh;
+    padding: 1vh 2vh;
+    font-weight: bold; 
+    font-size: 1.25rem;
+}
+li:hover {
+    background-color: #99a1bb;
+}
+.details {
+    background-color: #FFFFFF;
+    border-radius: 25px;
+    padding: 50px 20px;
+    transition: transform 0.2s;
+    padding: 5vh;
+    text-align:left;
+}
+.table-holder {
+    background-color: #FFFFFF;
+    padding: 1vh;
+    border-radius: 25px;
+}
+.table-row {
+    padding: 1.5vh;
+}
+
+.box {
+    width: 100%; 
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    background-color: #FFFFFF;
+    border-radius: 10px;
+    border: rgba(51, 48, 48, 0.2) solid 1px;
+    transition: transform 0.2s;
+    text-align: center;
+} */
+
+/* Simple style for the notification */
+.notification {
+    display: none;
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 10px;
+    background-color: #28a745;
+    color: white;
+    border-radius: 5px;
+    z-index: 1000;
+}
+
+/* Style for the disabled button */
+.disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
