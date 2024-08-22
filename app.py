@@ -33,13 +33,19 @@ def index():
     message = ""
 
     if request.method == "POST":
+        if 'reset' in request.form:
+            # Handle reset request
+            return render_template("index.html", prediction=None, spam_prob=None, message="")
+
+        # Handle check request
         message = request.form['message']
         message_vector = vectorizer.transform([message])
         spam_prob = model.predict_proba(message_vector)[0][1] * 100
         spam_prob = round(spam_prob, 2)
-        prediction = "Spam" if spam_prob > 50 else "Ham"
-        
+        prediction = "This message is classified as a Spam Mail" if spam_prob > 50 else "Ham"
+
     return render_template("index.html", prediction=prediction, spam_prob=spam_prob, message=message)
+
 
 @app.route("/feedback", methods=["POST"])
 def feedback():
@@ -55,6 +61,7 @@ def feedback():
             update_model()
             
             flash('Thank you for your feedback!', 'success')
+    else: flash('Thank you for your feedback!', 'success')
             
     return redirect(url_for('index'))
 

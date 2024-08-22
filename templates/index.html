@@ -7,101 +7,63 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
     <link rel="icon" href="{{ url_for('static', filename='img/filtering.png') }}">
     <title>Spam Filter</title>
-    <style>
-        
-    </style>
 </head>
 <body>
-    <div class="main">
-        <h1>Spam Filter</h1>
-        <form action="/" method="post">
-            <label for="message">Enter your email:</label><br>
-            <textarea name="message" id="message" rows="10" cols="30"></textarea><br>
-            <input type="submit" value="Check" id="check-button" class="disabled" disabled>
-        </form>
-
-        {% if prediction %}
-            <h2>Result:</h2>
-            <p>Spam Probability: {{ spam_prob }}%</p>
-            <p>This message is classified as: <strong>{{ prediction }}</strong></p>
-
-            <form action="/feedback" method="post">
-                <input type="hidden" name="message" value="{{ message }}">
-                <label for="correct_classification">Is this classification correct?</label><br>
-                <input type="radio" id="correct" name="correct_classification" value="yes"> Yes<br>
-                <input type="radio" id="incorrect" name="correct_classification" value="no"> No<br>
-                <div id="correct_label_div" style="display:none;">
-                    <label for="correct_label">Select correct label:</label><br>
-                    <input type="radio" id="ham" name="correct_label" value="ham"> Ham<br>
-                    <input type="radio" id="spam" name="correct_label" value="spam"> Spam<br>
-                </div>
-                <input type="submit" value="Submit Feedback">
-            </form>
-        {% endif %}
-
-        <!-- Flash messages -->
-        {% with messages = get_flashed_messages(with_categories=true) %}
+    {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
-                <div class="notification" id="notification">
+                <div class="notification " id="notification">
                     {% for category, message in messages %}
                         <p>{{ message }}</p>
                     {% endfor %}
                 </div>
             {% endif %}
         {% endwith %}
-        <script>
-            document.querySelectorAll('input[name="correct_classification"]').forEach((elem) => {
-                elem.addEventListener("change", function(event) {
-                    var value = event.target.value;
-                    var correctLabelDiv = document.getElementById('correct_label_div');
-                    correctLabelDiv.style.display = value === "no" ? "block" : "none";
-                });
-            });
-
-            // Show the notification if it exists
-            window.addEventListener('load', function() {
-                var notification = document.getElementById('notification');
-                if (notification) {
-                    notification.style.display = 'block';
-                    setTimeout(function() {
-                        notification.style.display = 'none';
-                    }, 5000);  // Hide the notification after 5 seconds
-                }
-            });
-
-
-            const messageInput = document.getElementById('message');
-            const checkButton = document.getElementById('check-button');
-    
-            function toggleCheckButton() {
-                if (messageInput.value.trim() === '') {
-                    checkButton.disabled = true;
-                    checkButton.classList.add('disabled');
-                } else {
-                    checkButton.disabled = false;
-                    checkButton.classList.remove('disabled');
-                }
-            }
-    
-            messageInput.addEventListener('input', toggleCheckButton);
-    
-            // Initial check in case there's already content
-            toggleCheckButton();
-    
-            // Show the notification if it exists
-            window.addEventListener('load', function() {
-                const notification = document.getElementById('notification');
-                if (notification) {
-                    notification.style.display = 'block';
-                    setTimeout(function() {
-                        notification.style.display = 'none';
-                    }, 5000);  // Hide the notification after 5 seconds
-                }
-            });
-        </script>
+    <div class="main">
+        <div class="row">
+            <h1 class=" d-flex justify-content-center align-items-center">Spam Filter Detector</h1>
+        </div>
+        <div class="row">
+            <div class="col-md-8">
+                <form action="/" method="post">
+                    <div class="row position-relative mb-2">
+                        <label for="message" class="d-flex align-items-center">
+                            <h2>Enter your email:</h2>
+                        </label>
+                        <button type="submit" id="reset-button" name="reset" class="position-absolute d-flex justify-content-center align-items-center" style="right: 15px; width: 20px; height: 50px; border: none; background: transparent;">
+                            <img src="{{ url_for('static', filename='img/circular.png') }}" alt="Icon" style="width: 30px; height: 30px;">
+                        </button>
+                    </div>
+                    
+                    <textarea name="message" id="message" rows="10" cols="30">{{ message }}</textarea><br>
+                    <input type="submit" value="Check" id="check-button" class="disabled button-input" disabled>
+                    
+                </form>
+            </div>
+            <div class="col-md-4">
+                <h2>Result:</h2>
+                {% if prediction %}
+                <h5>Spam Probability: <span style="color: red;">{{ spam_prob }}%</span></h5>
+                <!-- <p>This message is classified as: <strong>{{ prediction }}</strong></p> -->
+                <div class="row">
+                    <form action="/feedback" method="post">
+                        <input type="hidden" name="message" value="{{ message }}">
+                        <label for="correct_classification">Is this classification correct?</label><br>
+                        <input type="radio" id="correct" name="correct_classification" value="yes"> Yes<br>
+                        <input type="radio" id="incorrect" name="correct_classification" value="no"> No<br>
+                        <div id="correct_label_div" style="display:none;">
+                            <label for="correct_label">Select correct label:</label><br>
+                            <input type="radio" id="ham" name="correct_label" value="ham"> Ham<br>
+                            <input type="radio" id="spam" name="correct_label" value="spam"> Spam<br>
+                        </div>
+                        <input type="submit" value="Submit Feedback" class="button-input">
+                    </form>
+                </div>
+            {% endif %}
+            </div>
+        </div>
+        <!-- Flash messages -->
+        
     </div>
-    
-
-    
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 </body>
 </html>
